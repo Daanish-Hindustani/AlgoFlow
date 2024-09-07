@@ -1,0 +1,68 @@
+
+.nav-color {
+    background-color: #18191a;
+    margin-bottom: 1%;
+}
+.nav-link {
+    display: flex;
+    align-items: center;
+    color: white !important;
+}
+.nav-link i {
+    margin-right: 5px;
+}
+.search-stock {
+    border-bottom: 1px solid;
+}
+.navbar-nav {
+    flex-direction: row;
+}
+.ml-auto {
+    margin-left: auto;
+}
+.nav-item-right {
+    margin-right: 15px;
+    padding-right: 15px;
+}
+
+#timeframe{
+    background-color:  #18191a;
+    border-width: 0px;
+    padding: 0px;
+    margin: 10px;
+    width: 80px;
+    
+}
+#body-color {
+    background-color: #18191a;
+}
+
+#chart {
+    
+    height: 700px; /* Define a fixed height */
+    margin-bottom: 0%;
+     /* Border style */
+    
+    
+  }
+
+  #loading {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 1000;
+    text-align: center;
+    font-size: 2em;
+    color: #333;
+    line-height: 100vh;
+  }
+
+  
+
+
+
+

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- This file is for the crud application for the charts and db -->
+    <meta charset="UTF-8">
+    <title>Chart Input Form</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- <script src="{{url_for('static', filename='chart_details.js')}}"></script> -->
+</head>
+<body>
+    <h2>Create New Chart</h2>
+    <!-- Form to create a new chart -->
+    <form action="{{ url_for('charts_blueprint.create_chart') }}" method="post">
+        
+        <button type="submit">Create Chart</button>
+    </form>
+
+    <h2>Current Chart Data</h2>
+    <div id="chartData">
+        <p>
+            <strong>Name:</strong>
+            <input type="text" id="currentName" value="{{ chart_data['name'] }}" data-field="name" data-chart="{{ chart_data['name'] }}">
+        </p>
+        <p>
+            <strong>Ticker:</strong>
+            <input type="text" id="currentTicker" value="{{ chart_data['ticker'] }}" data-field="ticker" data-chart="{{ chart_data['name'] }}">
+        </p>
+        <p>
+            <strong>Interval:</strong>
+            <input type="text" id="currentInterval" value="{{ chart_data['interval'] }}" data-field="interval" data-chart="{{ chart_data['name'] }}">
+        </p>
+        <p>
+            <strong>Type:</strong>
+            <input type="text" id="currentType" value="{{ chart_data['chart_type'] }}" data-field="chart_type" data-chart="{{ chart_data['name'] }}">
+        </p>
+        
+        <button id="deleteChart" data-chart="{{ chart_data['name'] }}">Delete Chart</button>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Attach change event listener to input fields
+            $('#chartData input').on('change', function() {
+                var field = $(this).data('field'); // Get the field name (name, ticker, interval, type)
+                var value = $(this).val(); // Get the new value of the input field
+                var chartName = $(this).data('chart'); // Get the chart's unique identifier (name)
+
+                // Send AJAX request to update the chart data
+                $.ajax({
+                    url: '{{ url_for("charts_blueprint.update_chart") }}',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        'name': chartName, // Chart's unique identifier
+                        'field': field, // Field name to be updated
+                        'value': value // New value for the field
+                    }),
+                    success: function(response) {
+                        if (field === 'name') {
+                            // Redirect to the new URL if the 'name' field was updated
+                            window.location.href = "{{ url_for('charts_blueprint.chart', chart_name='') }}" + value + '/';
+                        } else {
+                            console.log('Chart data updated successfully.');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error updating chart data:', error);
+                    }
+                });
+            });
+
+            // Attach click event listener to delete button
+            $('#deleteChart').on('click', function() {
+                var chartName = $(this).data('chart'); // Get the chart's unique identifier (name)
+                // Send AJAX request to delete the chart
+                $.ajax({
+                    url: '{{ url_for("charts_blueprint.delete_chart") }}',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        'name': chartName // Chart's unique identifier
+                    }),
+                    success: function(response) {
+                        if (response.success) {
+                            // Redirect to the default chart or some other page after deletion
+                            window.location.href = '{{ url_for("charts_blueprint.default_chart") }}';
+                        } else {
+                            console.error('Error deleting chart:', response.error);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error deleting chart:', error);
+                    }
+                });
+            });
+        });
+    </script>  
+
+</body>
+</html>
